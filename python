@@ -1,4 +1,13 @@
-a=5
-b=8
-c=a+b
-print(c)
+USERNAME = "admin"
+PASSWORD = "password123"
+
+def login():
+    print("=== Login Page ===")
+    username = input("Enter username: ")
+    password = input("Enter password: ")
+    if username == USERNAME and password == PASSWORD:
+        print(f"Login successful! Welcome, {username}.")
+    else:
+        print("Login failed! Invalid username or password.")
+if __name__ == "__main__":
+    login()
