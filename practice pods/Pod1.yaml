@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myproject1
+  namespace: mohanasathya
+  labels:
+      app: project
+      env: lab
+spec:
+  containers:
+    - name: myproject1cont
+      image: nginx
