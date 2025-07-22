@@ -1,9 +1,0 @@
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: myproject2
-spec:
-  containers:
-    - name: myproject2cont
-      image: tomcat
