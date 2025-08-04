@@ -1,0 +1,72 @@
+pipeline {
+    agent any
+ tools{
+   maven 'maven3'
+   }
+
+    stages {
+        stage('checkout') {
+            steps {
+                echo 'Cloning the git repo'
+		git branch: 'main', url: 'https://github.com/pragadasathya/myfork12.git'
+            }
+        }
+     stage('SonarQube scan') {
+            steps {
+                echo 'scanning project'
+		sh 'ls -lrt'
+		sh '''mvn sonar:sonar\\
+	 	    -Dsonar.host.url=http://3.87.208.139:9000\\
+		    -Dsonar.login=squ_17731aa2bd7148687a298df1f44751d4dfc51cb2'''
+            }
+	}
+  
+        stage('Artifactory Build') {
+            steps {
+                echo 'buil artifactory'
+		sh 'mvn clean package'
+            }
+        }
+    stage('Building docker image') {
+            steps {
+                echo 'building the docker image'
+		sh 'docker build -t sathya240/sathyapragada:${BUILD_NUMBER} .'
+            }
+        }
+    stage('Push image') {
+            steps {
+                script{
+			withCredentials([string(credentialsId: 'Dockerhub', variable: 'Dockerhub')]) {
+    			sh 'docker login -u sathya240 -p $Dockerhub'
+			}
+		sh 'docker push sathya240/sathyapragada:${BUILD_NUMBER}'
+		echo ' docker image is pushed'
+
+            }
+    }
+}
+    stage('git push to deploment'){
+    environment{
+	GIT_REPO_NAME = "myfork12"
+	GIT_USER_NAME = "pragadasathya"
+	}
+    steps{
+	echo " update to deployment"
+	withCredentials([string(credentialsId: 'githubtoken', variable: 'githubtoken')]) {
+	sh '''
+	
+	    git config user.email "pragadasathya566@gmail.com"
+	    git config user.name "pragadasathya"
+
+	    sed -i "s/sathyapragada:.*/sathyapragada:${BUILD_NUMBER}/g"  Dockerfiles/Deployment.yaml
+
+	    git add .
+
+	    git commit -m " update deployment image tot new version ${BUILD_NUMBER}"
+	    git push https://${githubtoken}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+            '''
+}
+}
+}
+}
+}
