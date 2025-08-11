@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>E-commerce App</title>
+</head>
+<body>
+    <h1>Items</h1>
+    {% for item in items %}
+        <div>
+            <img src="{{ url_for('static', filename=item.image) }}" width="100">
+            <p>{{ item.name }} - ₹{{ item.price }}</p>
+            <a href="{{ url_for('add_to_cart', item_id=item.id) }}">Add to Cart</a>
+        </div>
+    {% endfor %}
+
+    <h1>Cart</h1>
+    {% for item in cart %}
+        <div>
+            <img src="{{ url_for('static', filename=item.image) }}" width="100">
+            <p>{{ item.name }} - ₹{{ item.price }}</p>
+            <a href="{{ url_for('delete_from_cart', item_id=item.id) }}">Remove</a>
+        </div>
+    {% endfor %}
+
+    <h2>Total Price: ₹{{ total_price }}</h2>
+    <h2>GST (18%): ₹{{ gst }}</h2>
+    <h2>Grand Total: ₹{{ grand_total }}</h2>
+</body>
+</html>
