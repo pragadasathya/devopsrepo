@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mc-app
+  name: my-app
   labels:
-    app: mc-app
+    app: my-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: mc-app
+      app: my-app
   template:
     metadata:
       labels:
-        app: mc-app
+        app: my-app
     spec:
       containers:
-      - name: mc-app
+      - name: my-app
         image: devopshubg333/k8s:3
         ports:
         - containerPort: 8080
@@ -23,7 +23,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mc-app-service
+  name: my-app-service
 spec:
   type: LoadBalancer
   ports:
@@ -32,4 +32,4 @@ spec:
     targetPort: 8080
     protocol: TCP
   selector:
-    app: mc-app
+    app: my-app
