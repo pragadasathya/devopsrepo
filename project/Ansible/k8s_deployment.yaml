@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: my-app
-        image: devopshubg333/k8s:3
+        image: sathya240/k8s1:3
         ports:
         - containerPort: 8080
 ---
